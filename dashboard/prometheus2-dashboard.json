@@ -75,10 +75,10 @@
       "height": 250,
       "panels": [
         {
-          "content": "# title",
+          "content": "<iframe src=\"https://fusakla.github.io/Prometheus2-grafana-dashboard/\" width=\"100%\" height=\"600px\"></iframe>",
           "id": 53,
           "links": [],
-          "mode": "markdown",
+          "mode": "html",
           "span": 12,
           "title": "",
           "type": "text"
@@ -87,8 +87,8 @@
       "repeat": null,
       "repeatIteration": null,
       "repeatRowId": null,
-      "showTitle": false,
-      "title": "Description",
+      "showTitle": true,
+      "title": "Dashboard description",
       "titleSize": "h6"
     },
     {
@@ -4824,6 +4824,6 @@
     ]
   },
   "timezone": "browser",
-  "title": "Prometheus2.0 (by FUSAKLA)",
-  "version": 4
+  "title": "Prometheus2.0 (v1.0.0 by FUSAKLA)",
+  "version": 1
 }

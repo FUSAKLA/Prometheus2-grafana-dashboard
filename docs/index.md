@@ -18,7 +18,7 @@ There are three ways to install this dashboard
    2. Download the [`JSON` definition](https://raw.githubusercontent.com/FUSAKLA/Prometheus2-grafana-dashboard/master/dashboard/prometheus2-dashboard.json)
    and using the `Upload .json file` dialog
    3. Load the dashboard directly form Grafana.com website using
-   dashboard ID `3681`
+   dashboard ID `3681` or on link https://grafana.com/dashboards/3681
 
 
 ## Description
@@ -27,11 +27,11 @@ There are three ways to install this dashboard
 
 
 ## Screenshots
-![screenshot1](img/dashboard.png "Top of dashboard with main info")
+![screenshot1](https://grafana.com/api/dashboards/3681/images/2334/image "Top of dashboard with main info")
 
-![screenshot2](img/dashboard1.png "Data storage info")
+![screenshot2](https://grafana.com/api/dashboards/3681/images/2340/image "Data storage info")
 
-![screenshot3](img/dashboard2.png "Resources consumption (usin heapster)")
+![screenshot3](https://grafana.com/api/dashboards/3681/images/2337/image "Resources consumption (usin heapster)")
 
 ## Support
 

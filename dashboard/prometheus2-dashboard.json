@@ -2414,7 +2414,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
-          "description": "Count of appended samples to head block of TSDB per second",
+          "description": "Count of appended samples to head block of TSDB",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2443,7 +2443,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(prometheus_tsdb_head_samples_appended_total{instance=\"$instance\"}[$aggregation_interval])",
+              "expr": "increase(prometheus_tsdb_head_samples_appended_total{instance=\"$instance\"}[$aggregation_interval])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Appended samples",
@@ -2455,7 +2455,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Samples Appended per second",
+          "title": "Samples Appended",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2513,6 +2513,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph shows actual count of chunks in head block in time.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2599,6 +2600,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
+          "description": "Graph showing length of head block in time.\nActually I'm not sure how much useful this information is :)",
           "fill": 1,
           "id": 35,
           "legend": {
@@ -2672,6 +2674,8 @@
           "aliasColors": {
             "Chunks": "#1F78C1",
             "Chunks to persist": "#508642",
+            "Created chunks": "#7eb26d",
+            "Deleted chunks": "#bf1b00",
             "Max chunks": "#052B51",
             "Max to persist": "#3F6833"
           },
@@ -2679,6 +2683,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph showing chunk balance in head block.\nThere are created (+), deleted (-) and their difference showing result state of chunks in head block.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2700,31 +2705,47 @@
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
+          "seriesOverrides": [
+            {
+              "alias": "Difference",
+              "fill": 0
+            },
+            {
+              "alias": "Deleted chunks",
+              "yaxis": 1
+            }
+          ],
           "spaceLength": 10,
           "span": 4,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(prometheus_tsdb_head_chunks_created_total{instance=\"$instance\"}[$aggregation_interval])) by (instance)",
+              "expr": "increase(prometheus_tsdb_head_chunks_created_total{instance=\"$instance\"}[$aggregation_interval])",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "created on {{ instance }}",
+              "legendFormat": "Created chunks",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(prometheus_tsdb_head_chunks_removed_total{instance=\"$instance\"}[$aggregation_interval])) by (instance) * -1",
+              "expr": "increase(prometheus_tsdb_head_chunks_removed_total{instance=\"$instance\"}[$aggregation_interval]) * -1",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "deleted on {{ instance }}",
+              "legendFormat": "Deleted chunks",
               "refId": "C"
+            },
+            {
+              "expr": "increase(prometheus_tsdb_head_chunks_created_total{instance=\"$instance\"}[$aggregation_interval]) - increase(prometheus_tsdb_head_chunks_removed_total{instance=\"$instance\"}[$aggregation_interval])",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Difference",
+              "refId": "A"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Head Chunks Created/Deleted per second",
+          "title": "Head Chunks Created/Deleted",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2771,11 +2792,14 @@
       "height": 250,
       "panels": [
         {
-          "aliasColors": {},
+          "aliasColors": {
+            "Compaction duration": "#cca300"
+          },
           "bars": false,
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
+          "description": "Chart showing how long took the compaction of data blocks in TSDB.",
           "fill": 1,
           "id": 33,
           "legend": {
@@ -2802,10 +2826,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(prometheus_tsdb_compaction_duration_sum{instance=\"$instance\"}[30m]) / increase(prometheus_tsdb_compaction_duration_count{instance=\"$instance\"}[30m])) by (instance)",
+              "expr": "increase(prometheus_tsdb_compaction_duration_sum{instance=\"$instance\"}[30m]) / increase(prometheus_tsdb_compaction_duration_count{instance=\"$instance\"}[30m])",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ instance }}",
+              "legendFormat": "Compaction duration",
               "refId": "B"
             }
           ],
@@ -2952,7 +2976,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(prometheus_tsdb_wal_truncate_duration_seconds{instance=\"$instance\"}) by (instance, quantile)",
+              "expr": "sum(prometheus_tsdb_wal_truncate_duration_seconds{instance=\"$instance\"}) by (quantile)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ quantile }} on {{ instance }}",

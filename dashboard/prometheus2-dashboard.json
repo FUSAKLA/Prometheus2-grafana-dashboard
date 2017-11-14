@@ -556,6 +556,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "This chart displays maximum quantile duration for each query slice. It's just informative for more exact profiling use histograms for each type of slice.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -596,7 +597,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Query elapsed time",
+          "title": "Query elapsed time per slice",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -641,6 +642,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "This graph displays number of time series ingested (+) in the head block and also count of deleted series (-).",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -669,19 +671,19 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(prometheus_tsdb_head_series_created_total{instance=\"$instance\"}[$aggregation_interval])) by (instance)",
+              "expr": "sum(increase(prometheus_tsdb_head_series_created_total{instance=\"$instance\"}[$aggregation_interval]))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "created on {{ instance }}",
+              "legendFormat": "created series",
               "metric": "prometheus_local_storage_maintain_series_duration_seconds_count",
               "refId": "A",
               "step": 1800
             },
             {
-              "expr": "sum(increase(prometheus_tsdb_head_series_removed_total{instance=\"$instance\"}[$aggregation_interval])) by (instance) * -1",
+              "expr": "sum(increase(prometheus_tsdb_head_series_removed_total{instance=\"$instance\"}[$aggregation_interval])) * -1",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "removed on {{ instance }}",
+              "legendFormat": "removed series",
               "refId": "B"
             }
           ],
@@ -733,6 +735,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "This graph shows most of errors exposed by the Prometheus. Not all of them are critical but better watch this for some unusual behavior. \nThose are:\n   - scrapes_exceeded_sample_limit\n   - scrapes_sample_duplicate_timestamp\n   - scrapes_sample_out_of_bounds\n   - scrapes_sample_out_of_order\n   - rule_evaluation_failures\n   - tsdb_compactions_failed\n   - tsdb_reloads_failures\n   - tsdb_head_series_not_found\n   - evaluator_iterations_missed\n   - evaluator_iterations_skipped",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -916,7 +919,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
-          "description": "",
+          "description": "This graph displays scrape delay based on time between last scrapes minus scrape interval.\nIt's the highest quantile value.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -928,7 +931,7 @@
             "current": true,
             "max": true,
             "min": false,
-            "show": false,
+            "show": true,
             "sort": "max",
             "sortDesc": true,
             "total": false,
@@ -949,11 +952,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "prometheus_target_interval_length_seconds{instance=\"$instance\",quantile=\"0.99\"} - $scrape_interval",
+              "expr": "max(prometheus_target_interval_length_seconds{instance=\"$instance\"}) - $scrape_interval",
               "format": "time_series",
-              "interval": "2m",
+              "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
+              "legendFormat": "scrape delay",
               "metric": "",
               "refId": "A",
               "step": 300
@@ -962,7 +965,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Scrape delay (counts with 1m scrape interval)",
+          "title": "Scrape delay",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1005,6 +1008,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "How long for given percentage of evaluated rules did it take",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1041,7 +1045,7 @@
               "expr": "sum(prometheus_evaluator_duration_seconds{instance=\"$instance\"}) by (instance, quantile)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "Queue length",
+              "legendFormat": "Queue length for {{quantile}}% of rules",
               "metric": "prometheus_local_storage_indexing_queue_length",
               "refId": "B",
               "step": 1800
@@ -1107,6 +1111,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph showing actual count of HTTP requests called on given endpoints of Prometheus",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1135,10 +1140,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(http_requests_total{instance=\"$instance\"}[$aggregation_interval])) by (instance, handler) > 0",
+              "expr": "sum(increase(http_requests_total{instance=\"$instance\"}[$aggregation_interval])) by (handler) > 0",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ handler }} on {{ instance }}",
+              "legendFormat": "Request count on {{ handler }}",
               "metric": "",
               "refId": "A",
               "step": 1800
@@ -1147,7 +1152,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Request count",
+          "title": "Request count per handler",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1192,6 +1197,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Max request duration of HTTP requests per handlers. It displays biggest quantile for each handler. For more exact data use histogram per handler.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1222,18 +1228,18 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "max(sum(http_request_duration_microseconds{instance=\"$instance\"}) by (instance, handler, quantile)) by (instance, handler) > 0",
+              "expr": "max(sum(http_request_duration_microseconds{instance=\"$instance\"}) by (handler, quantile)) by (handler) > 0",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
-              "legendFormat": "{{ handler }} on {{ instance }}",
+              "legendFormat": "Request duration on {{ handler }}",
               "refId": "B"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Request duration per handler",
+          "title": "Max request duration per handler",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1278,6 +1284,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Max request size of HTTP requests per handler. It displays biggest quantile for each handler. For more exact data use histogram per handler.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1306,18 +1313,18 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(http_request_size_bytes{instance=\"$instance\", quantile=\"0.99\"}[$aggregation_interval])) by (instance, handler) > 0",
+              "expr": "max(sum(increase(http_request_size_bytes{instance=\"$instance\"}[$aggregation_interval])) by (quantile, handler)) by (handler) > 0",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
-              "legendFormat": "{{ handler }} in {{ instance }}",
+              "legendFormat": "Request size on {{ handler }}",
               "refId": "B"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Request size by handler",
+          "title": "Max request size by handler",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1366,6 +1373,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph shows actual count of concurrent queries and limit value as yellow line set in Prometheus configuration.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1402,8 +1410,8 @@
             {
               "expr": "sum(prometheus_engine_queries{instance=\"$instance\"}) by (instance, handler)",
               "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "Current count ",
+              "intervalFactor": 1,
+              "legendFormat": "Count of concurrent queries",
               "metric": "last",
               "refId": "A",
               "step": 1800
@@ -1421,7 +1429,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Cont of concurent queries",
+          "title": "Count of concurrent queries",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1464,7 +1472,7 @@
       "titleSize": "h6"
     },
     {
-      "collapse": false,
+      "collapse": true,
       "height": 250,
       "panels": [
         {
@@ -1480,6 +1488,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph shows actual count of alert notifications  and limit of queue size  as yellow line set in Prometheus configuration.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1517,7 +1526,7 @@
               "expr": "sum(prometheus_notifications_queue_capacity{instance=\"$instance\"})by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "Alert queue capacity ",
+              "legendFormat": "Current queue size",
               "metric": "prometheus_local_storage_checkpoint_last_size_bytes",
               "refId": "A",
               "step": 1800
@@ -1526,7 +1535,7 @@
               "expr": "sum(prometheus_notifications_queue_length{instance=\"$instance\"})by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "Alert queue size on ",
+              "legendFormat": "Max queue size ",
               "metric": "prometheus_local_storage_checkpoint_last_size_bytes",
               "refId": "B",
               "step": 1800
@@ -1535,7 +1544,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Alert queue size",
+          "title": "Alert notifications queue size",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1580,6 +1589,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph shows actual count of alertmanagers Prometheus discovered using alertmanager SD.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1608,10 +1618,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(prometheus_notifications_alertmanagers_discovered{instance=\"$instance\"}) by (instance)",
+              "expr": "prometheus_notifications_alertmanagers_discovered{instance=\"$instance\"}",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "Checkpoint chunks written/s",
+              "legendFormat": "Count of alertmanagers",
               "metric": "prometheus_local_storage_checkpoint_series_chunks_written_sum",
               "refId": "A",
               "step": 1800
@@ -1665,6 +1675,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph displaying errors in alerting by type.\nTypes are:\n   - notifications_dropped\n   - rule_evaluation_failures",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1760,6 +1771,27 @@
     },
     {
       "collapse": false,
+      "height": -269,
+      "panels": [
+        {
+          "content": "Service discovery row is customized to show info about SD I use in my setup (Consul, Marathon, Kubernetes). Does'n seem to be generic for all SD types so it's hard to make it general.\n\nI leave it here collapsed as an inspiration but you will probably want to **customize this**. Also the The **errors graph shows also just those three SD specific errors**. \n",
+          "id": 54,
+          "links": [],
+          "mode": "markdown",
+          "span": 12,
+          "title": "Service discovery row",
+          "type": "text"
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": true,
       "height": 250,
       "panels": [
         {
@@ -1768,6 +1800,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
+          "description": "Count of requests for Sonsul SD specified by `scrape_job` label",
           "fill": 1,
           "id": 43,
           "legend": {
@@ -1844,6 +1877,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
+          "description": "Count of requests for Marathon SD specified by `scrape_job` label",
           "fill": 1,
           "id": 44,
           "legend": {
@@ -1920,6 +1954,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
+          "description": "Count of requests for Kuernetes SD specified by `scrape_job` label",
           "fill": 1,
           "id": 45,
           "legend": {
@@ -2001,6 +2036,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Graph displaying errors related to SD.\nAgain not all of them has to be critical but better watch out for them.\nTypes are:\n   - sd_file_read_errors\n   - sd_consul_rpc_failures\n   - sd_marathon_refresh_failures\n   - sd_openstack_refresh_failures",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2028,16 +2064,6 @@
           "stack": false,
           "steppedLine": false,
           "targets": [
-            {
-              "expr": "sum(increase(prometheus_target_scrapes_exceeded_sample_limit_total{instance=\"$instance\"}[$aggregation_interval])) by (instance) > 0",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 2,
-              "legendFormat": "exceeded_sample_limit on {{ instance }}",
-              "metric": "prometheus_local_storage_chunk_ops_total",
-              "refId": "A",
-              "step": 1800
-            },
             {
               "expr": "sum(increase(prometheus_sd_file_read_errors_total{instance=\"$instance\"}[$aggregation_interval])) by (instance) > 0",
               "format": "time_series",
@@ -2129,12 +2155,15 @@
       "height": 250,
       "panels": [
         {
-          "aliasColors": {},
+          "aliasColors": {
+            "prometheus-collector:9090": "#e5a8e2"
+          },
           "bars": false,
           "dashLength": 10,
           "dashes": false,
           "datasource": "${DS_PROMETHEUS}",
-          "fill": 1,
+          "decimals": 0,
+          "fill": 6,
           "id": 36,
           "legend": {
             "avg": false,
@@ -2157,12 +2186,12 @@
           "spaceLength": 10,
           "span": 3,
           "stack": false,
-          "steppedLine": false,
+          "steppedLine": true,
           "targets": [
             {
-              "expr": "sum(increase(prometheus_tsdb_reloads_total{instance=\"$instance\"}[30m])) by (instance)",
+              "expr": "sum(increase(prometheus_tsdb_reloads_total{instance=\"$instance\"}[$aggregation_interval])) by (instance)",
               "format": "time_series",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{ instance }}",
               "refId": "A"
             }
@@ -2207,6 +2236,7 @@
           "aliasColors": {
             "Chunks": "#1F78C1",
             "Chunks to persist": "#508642",
+            "Loaded data blocks": "#7eb26d",
             "Max chunks": "#052B51",
             "Max to persist": "#3F6833"
           },
@@ -2216,7 +2246,7 @@
           "datasource": "$datasource",
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 5,
           "id": 5,
           "legend": {
             "avg": false,
@@ -2239,7 +2269,7 @@
           "spaceLength": 10,
           "span": 3,
           "stack": false,
-          "steppedLine": false,
+          "steppedLine": true,
           "targets": [
             {
               "expr": "sum(prometheus_tsdb_blocks_loaded{instance=\"$instance\"}) by (instance)",
@@ -2271,6 +2301,7 @@
           },
           "yaxes": [
             {
+              "decimals": 0,
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2293,12 +2324,14 @@
             "Chunks": "#1F78C1",
             "Chunks to persist": "#508642",
             "Max chunks": "#052B51",
-            "Max to persist": "#3F6833"
+            "Max to persist": "#3F6833",
+            "Time series count": "#ef843c"
           },
           "bars": false,
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Shows total count of time series in head block of TSDB.",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2339,7 +2372,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Time series total count",
+          "title": "Time series total count in head",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2374,11 +2407,14 @@
           ]
         },
         {
-          "aliasColors": {},
+          "aliasColors": {
+            "Appended samples": "#447ebc"
+          },
           "bars": false,
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
+          "description": "Count of appended samples to head block of TSDB per second",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2407,10 +2443,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(prometheus_tsdb_head_samples_appended_total{instance=\"$instance\"}[$aggregation_interval])) by (instance)",
+              "expr": "rate(prometheus_tsdb_head_samples_appended_total{instance=\"$instance\"}[$aggregation_interval])",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "samples/s {{instance}}",
+              "legendFormat": "Appended samples",
               "metric": "prometheus_local_storage_ingested_samples_total",
               "refId": "A",
               "step": 1800

@@ -357,7 +357,8 @@
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
-              "refId": "A"
+              "refId": "A",
+              "legendFormat": "{{version}}"
             }
           ],
           "thresholds": "",
@@ -371,7 +372,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "name"
         },
         {
           "cacheTimeout": null,

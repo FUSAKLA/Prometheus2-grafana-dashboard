@@ -1039,7 +1039,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(prometheus_evaluator_duration_seconds{instance=\"$instance\"}) by (instance, quantile)",
+              "expr": "sum(prometheus_rule_evaluation_duration_seconds{instance=\"$instance\"}) by (instance, quantile)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Queue length",
@@ -1136,7 +1136,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(http_requests_total{instance=\"$instance\"}[$aggregation_interval])) by (instance, handler) > 0",
+              "expr": "sum(increase(prometheus_http_requests_total{instance=\"$instance\"}[$aggregation_interval])) by (instance, handler) > 0",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ handler }} on {{ instance }}",
@@ -1223,11 +1223,11 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "max(sum(http_request_duration_microseconds{instance=\"$instance\"}) by (instance, handler, quantile)) by (instance, handler) > 0",
+              "expr": "histogram_quantile(0.99, sum(increase(prometheus_http_request_duration_seconds_bucket{instance=\"$instance\"}[$aggregation_interval])) by (le,instance, handler)) > 0",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
-              "legendFormat": "{{ handler }} on {{ instance }}",
+              "legendFormat": "0.99φ {{ handler }}",
               "refId": "B"
             }
           ],
@@ -1251,7 +1251,7 @@
           },
           "yaxes": [
             {
-              "format": "µs",
+              "format": "s",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1307,7 +1307,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(http_request_size_bytes{instance=\"$instance\", quantile=\"0.99\"}[$aggregation_interval])) by (instance, handler) > 0",
+              "expr": "histogram_quantile(0.99, sum(increase(prometheus_http_response_size_bytes_bucket{instance=\"$instance\"}[$aggregation_interval])) by (le,instance, handler)) > 0",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -1422,7 +1422,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Cont of concurent queries",
+          "title": "Count of concurent queries",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2917,10 +2917,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(prometheus_tsdb_wal_truncate_duration_seconds{instance=\"$instance\"}) by (instance, quantile)",
+              "expr": "sum(increase(prometheus_tsdb_wal_truncate_duration_seconds_sum{instance=\"$instance\"}[1m]) / increase(prometheus_tsdb_wal_truncate_duration_seconds_count{instance=\"$instance\"}[1m])) by (instance)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ quantile }} on {{ instance }}",
+              "legendFormat": "duration",
               "refId": "A"
             }
           ],
@@ -2943,7 +2943,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "s",
               "label": null,
               "logBase": 1,
               "max": null,

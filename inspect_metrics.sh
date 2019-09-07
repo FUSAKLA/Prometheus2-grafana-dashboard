@@ -16,7 +16,7 @@ if [ ! $(command -v jq) ];then
 fi
 
 prometheus_metrics=$(curl -s "$PROMETHEUS_URL/api/v1/series" --data-urlencode "match[]=$METRICS_SELECTOR" | jq -r '[.data[].__name__] | unique | .[]')
-dashboard_metrics=$(grep -Eo "($DASHBOARD_METRICS_PREFIXES)_[a-z]+_[a-z_]+" "$DASHBOARD_FILE")
+dashboard_metrics=$(grep -Eo "($DASHBOARD_METRICS_PREFIXES)_[a-z]+_[a-z_]+" "$DASHBOARD_FILE" | sort | uniq -u)
 
 echo "Checking for Prometheus metrics not used in the dashboard:"
 for metric_name in $prometheus_metrics; do

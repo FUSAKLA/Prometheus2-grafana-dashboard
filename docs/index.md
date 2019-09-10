@@ -20,12 +20,14 @@ There are three ways to install this dashboard
    3. Load the dashboard directly form Grafana.com website using
    dashboard ID `3681` or on link https://grafana.com/dashboards/3681
 
-
-## Description
-
-*I will add some basic description for every row i hope*
-
-
+## Usage:
+- The constant type variable `custom_label_name` allows you to identify the Prometheus instance by additional label. By default it's identified by `instance` and `job` (default value of the custom label).
+- Queries using `increase` or `rate` use the interval variable `Aggregation interval` as a range vector selector. Title of graph should always show the interval value.
+- All panels which describes latency mostly shows quantile. This is controlled by the variable `Quantile` so make use of it.
+- Some panels uses overrided time interval to longer value, this can be controlled by the `Long term interval` variable.
+- Beware that some collapsed rows could be query expensive on the datasource (depends on complexity of observed Prometheus config or number of those instances). Better make sure to pick only one particular
+    instance before expanding those rows.
+    
 ## Screenshots
 ![screenshot1](https://grafana.com/api/dashboards/3681/images/2334/image "Top of dashboard with main info")
 

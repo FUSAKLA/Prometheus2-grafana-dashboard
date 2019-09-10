@@ -20,6 +20,10 @@ dashboard_metrics=$(grep -Eo "($DASHBOARD_METRICS_PREFIXES)_[a-z]+_[a-z_]+" "$DA
 
 echo "Checking for Prometheus metrics not used in the dashboard:"
 for metric_name in $prometheus_metrics; do
+  if echo "$metric_name" | grep -qE '(:?prometheus|net_conntrack)_.*(:?fail|duplicate|out_of|error|not_found|corrupt|dropped|missed|exceeded).*_total'; then
+    continue
+  fi
+
   if grep -q "$metric_name" "$DASHBOARD_FILE"; then
     continue
   fi

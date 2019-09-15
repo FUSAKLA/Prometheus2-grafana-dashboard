@@ -1,20 +1,19 @@
 {
   "__inputs": [
     {
-      "name": "DS_TRICKSTER_(PROMETHEUS PROXY)",
-      "label": "Trickster (Prometheus proxy)",
+      "name": "datasource",
+      "label": "datasource",
       "description": "",
-
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
     },
     {
-      "name": "VAR_CUSTOM_LABEL_NAME",
+      "name": "custom_label_name",
       "type": "constant",
       "label": "custom_label_name",
       "value": "job",
-      "description": ""
+      "description": "Additional label of the `prometheus_build_metric` used to distinguish Prometheis instances with identical `instance` label."
     }
   ],
   "__requires": [
@@ -144,7 +143,7 @@
   ],
   "panels": [
     {
-      "content": "<div style=\"text-align: center;padding-top: 10px;\">\n<h1 style=\"color: #DA4E31;\">🧦 Welcome!</h1>\n<h3> In case you encounter any issues or have a feature request, please refer to the GitHub reposritory <a target=\"_blank\" href=\"https://fusakla.github.io/Prometheus2-grafana-dashboard\">https://fusakla.github.io/Prometheus2-grafana-dashboard</a></h3>\n</div>\n\n### Few advices:\n - The constant type variable `custom_label_name` allows you to identify the Prometheus instance by additional label. By default it's identified by `instance` and `job` (default value of the custom label).\n - Queries using `increase` or `rate` use the interval variable `Aggregation interval` as a range vector selector. Title of graph should always show the interval value.\n - All panels which describes latency mostly shows quantile. This is controlled by the variable `Quantile` so make use of it.\n - Some panels uses overrided time interval to longer value, this can be controlled by the `Long term interval` variable.\n - Beware that some collapsed rows could be query expensive on the datasource (depends on complexity of observed Prometheus config or number of those instances). Better make sure to pick only one particular\n   instance before expanding those rows.\n",
+      "content": "# 🧦 Welcome!\nIn case you encounter any issues or have a feature request, please refer to the GitHub reposritory [https://fusakla.github.io/Prometheus2-grafana-dashboard](https://fusakla.github.io/Prometheus2-grafana-dashboard)\n\n\n### Few advices:\n - The constant type variable `custom_label_name` allows you to identify the Prometheus instance by additional label. By default it's identified by `instance` and `job` (default value of the custom label).\n - Queries using `increase` or `rate` use the interval variable `Aggregation interval` as a range vector selector. Title of graph should always show the interval value.\n - All panels which describes latency mostly shows quantile. This is controlled by the variable `Quantile` so make use of it.\n - Some panels uses overrided time interval to longer value, this can be controlled by the `Long term interval` variable.\n - Beware that some collapsed rows could be query expensive on the datasource (depends on complexity of observed Prometheus config or number of those instances). Better make sure to pick only one particular\n   instance before expanding those rows.\n",
       "gridPos": {
         "h": 6,
         "w": 24,
@@ -179,7 +178,7 @@
     {
       "cacheTimeout": null,
       "columns": [],
-      "datasource": "${DS_TRICKSTER_(PROMETHEUS PROXY)}",
+      "datasource": "$datasource",
       "fontSize": "100%",
       "gridPos": {
         "h": 5,
@@ -2758,7 +2757,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TRICKSTER_(PROMETHEUS PROXY)}",
+          "datasource": "$datasource",
           "decimals": 0,
           "fill": 5,
           "fillGradient": 0,
@@ -2858,7 +2857,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TRICKSTER_(PROMETHEUS PROXY)}",
+          "datasource": "$datasource",
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2958,7 +2957,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TRICKSTER_(PROMETHEUS PROXY)}",
+          "datasource": "$datasource",
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -3089,7 +3088,7 @@
           "bars": true,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TRICKSTER_(PROMETHEUS PROXY)}",
+          "datasource": "$datasource",
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -3179,7 +3178,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TRICKSTER_(PROMETHEUS PROXY)}",
+          "datasource": "$datasource",
           "fill": 3,
           "fillGradient": 0,
           "gridPos": {
@@ -3276,7 +3275,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_TRICKSTER_(PROMETHEUS PROXY)}",
+          "datasource": "$datasource",
           "fill": 3,
           "fillGradient": 0,
           "gridPos": {
@@ -5111,19 +5110,14 @@
       },
       {
         "current": {
-          "value": "${VAR_CUSTOM_LABEL_NAME}",
-          "text": "${VAR_CUSTOM_LABEL_NAME}"
+          "text": "job",
+          "value": "job"
         },
         "hide": 2,
-        "label": null,
+        "label": "custom_label_name",
         "name": "custom_label_name",
-        "options": [
-          {
-            "value": "${VAR_CUSTOM_LABEL_NAME}",
-            "text": "${VAR_CUSTOM_LABEL_NAME}"
-          }
-        ],
-        "query": "${VAR_CUSTOM_LABEL_NAME}",
+        "options": [],
+        "query": "job",
         "skipUrlSync": false,
         "type": "constant"
       },

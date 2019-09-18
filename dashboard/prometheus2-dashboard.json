@@ -1,19 +1,19 @@
 {
   "__inputs": [
     {
-      "name": "datasource",
-      "label": "datasource",
-      "description": "",
+      "name": "VAR_DATASOURCE",
+      "label": "Prometheus datasource",
+      "description": "Prometheus datasource to query for data.",
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
     },
     {
-      "name": "custom_label_name",
+      "name": "VAR_CUSTOM_LABEL_NAME",
       "type": "constant",
-      "label": "custom_label_name",
+      "label": "Custom lable name",
       "value": "job",
-      "description": "Additional label of the `prometheus_build_metric` used to distinguish Prometheis instances with identical `instance` label."
+      "description": "Name of additional label of the `prometheus_build_metric` metric to be used to distinguish multiple Prometheis instances with identical `instance` label."
     }
   ],
   "__requires": [
@@ -5071,8 +5071,8 @@
       {
         "current": {
           "selected": true,
-          "text": "default",
-          "value": "default"
+          "text": "${VAR_DATASOURCE}",
+          "value": "${VAR_DATASOURCE}"
         },
         "hide": 0,
         "includeAll": false,
@@ -5110,14 +5110,19 @@
       },
       {
         "current": {
-          "text": "job",
-          "value": "job"
+          "value": "${VAR_CUSTOM_LABEL_NAME}",
+          "text": "${VAR_CUSTOM_LABEL_NAME}"
         },
         "hide": 2,
-        "label": "custom_label_name",
+        "label": "Custom label name",
         "name": "custom_label_name",
-        "options": [],
-        "query": "job",
+        "options": [
+          {
+            "value": "${VAR_CUSTOM_LABEL_NAME}",
+            "text": "${VAR_CUSTOM_LABEL_NAME}"
+          }
+        ],
+        "query": "${VAR_CUSTOM_LABEL_NAME}",
         "skipUrlSync": false,
         "type": "constant"
       },
@@ -5128,7 +5133,7 @@
         "definition": "label_values(prometheus_build_info, $custom_label_name)",
         "hide": 0,
         "includeAll": true,
-        "label": "Custom label",
+        "label": "Custom label value",
         "multi": true,
         "name": "custom_label_value",
         "options": [],

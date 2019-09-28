@@ -6,6 +6,8 @@ but also in case of any issues provide deep insight into Prometheus internal met
 Most of the graphs are grouped into rows thematically, which are collapsed so they won't be loaded until you expand them.
 Bear in mind that some of those could be more query intensive so better try them out on smaller time range first.
 
+**Github repository [https://github.com/FUSAKLA/Prometheus2-grafana-dashboard](https://github.com/FUSAKLA/Prometheus2-grafana-dashboard)**
+
 ## Installation
 There are two ways to install this dashboard
 
@@ -33,11 +35,17 @@ Sorry for the inconvenience :/
 
 
 ## Screenshots
-![screenshot1](https://grafana.com/api/dashboards/3681/images/2334/image "Top of dashboard with main info")
+![Top of dashboard with main info](https://grafana.com/api/dashboards/3681/images/6907/image "Top of dashboard with main info")
 
-![screenshot2](https://grafana.com/api/dashboards/3681/images/2340/image "Data storage info")
+![Numebr of requests and latencies](https://grafana.com/api/dashboards/3681/images/6910/image "Numebr of requests and latencies")
 
-![screenshot3](https://grafana.com/api/dashboards/3681/images/2337/image "Resources consumption (usin heapster)")
+![Resources usage data](https://grafana.com/api/dashboards/3681/images/6911/image "Resources usage data")
+
+![Service discovery metrics](https://grafana.com/api/dashboards/3681/images/6909/image "Service discovery metrics")
+
+![Network usage data](https://grafana.com/api/dashboards/3681/images/6908/image "Network usage data")
+
+
 
 
 ## Updating the dashboard

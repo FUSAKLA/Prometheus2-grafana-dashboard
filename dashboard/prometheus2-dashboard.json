@@ -584,6 +584,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": "$datasource",
       "fill": 0,
       "fillGradient": 1,
       "gridPos": {
